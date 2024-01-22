@@ -21,6 +21,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"]
 }
