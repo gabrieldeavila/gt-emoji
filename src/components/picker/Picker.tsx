@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
-import CATEGORIES from "../categories";
-import EMOJI_PER_CATEGORY from "../emoji_per_category";
+import React from "react";
+import { createPortal } from "react-dom";
+import EmojiSt from "./style";
+import Categories from "./categories";
 
 function Picker() {
-  useEffect(() => {
-    console.log(EMOJI_PER_CATEGORY, CATEGORIES);
-  }, []);
-
-  return <div>Picker</div>;
+  return createPortal(
+    <EmojiSt.Wrapper>
+      <EmojiSt.Content>
+        <Categories />
+      </EmojiSt.Content>
+    </EmojiSt.Wrapper>,
+    document.body
+  );
 }
 
 export default Picker;
