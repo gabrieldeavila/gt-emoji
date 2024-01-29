@@ -1,14 +1,28 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const EmojiWrapper = styled.div`
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, #fcc200 0%, #32cd32  35%, #e0ffff 100%);
+
+  * {
+    user-select: none;
+  }
+`;
+
+const EmojiContent = styled.div`
   position: fixed;
-  background: var(--emoji-picker-background, #1a1110);
+  background: var(--emoji-picker-background, #1a11105c);
+  backdrop-filter: blur(5px);
   padding: 0.5rem;
   margin: 1rem;
   border-radius: var(--emoji-picker-default-border-radius, 5px);
+  max-height: 20rem;
+  max-width: 35vw;
 `;
-
-const EmojiContent = styled.div``;
 
 const EmojiSt = {
   Wrapper: EmojiWrapper,
@@ -19,13 +33,7 @@ export default EmojiSt;
 
 const CategoriesWrapper = styled.div``;
 
-const CategoriesContent = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 0.25rem;
-  max-width: 400px;
-  overflow: auto;
-
+const scrollbarCss = css`
   /* change the scrollbar to be the minimum posible */
   &::-webkit-scrollbar {
     width: 12px;
@@ -40,6 +48,16 @@ const CategoriesContent = styled.div`
   &::-webkit-scrollbar-track {
     background-color: var(--emoji-picker-scroll-background, #242124);
   }
+`;
+
+const CategoriesContent = styled.div`
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.25rem;
+  max-width: 400px;
+  overflow: auto;
+
+  ${scrollbarCss}
 `;
 
 const CategoriesItem = styled.div`
@@ -75,8 +93,65 @@ const OptItemWrapper = styled.div`
   color: var(--emoji-picker-option-color, #fff);
 `;
 
+const OptItemContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+`;
+
+const EmojiName = styled.div`
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+`;
+
+const OptItemName = styled.div`
+  font-size: 0.8rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+`;
+
 export const OptionSt = {
   Item: {
     Wrapper: OptItemWrapper,
+    Content: OptItemContent,
+    Name: OptItemName,
   },
+  Emoji: {
+    Name: EmojiName,
+  },
+};
+
+const OptionsStWrapper = styled.div`
+  position: relative;
+  max-height: 15rem;
+  padding: 0.5rem 0;
+`;
+
+const OptionsStContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: inherit;
+  padding-right: 0.5rem;
+
+  ${scrollbarCss};
+
+  & ${OptItemWrapper}:first-child ${OptItemName} {
+    padding-top: 0;
+  }
+`;
+
+export const OptionsSt = {
+  Wrapper: OptionsStWrapper,
+  Content: OptionsStContent,
 };

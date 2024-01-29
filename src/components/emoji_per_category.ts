@@ -1,10 +1,11 @@
 // emoji per category
+import { IEmoji } from "../interfaces/EMOJI";
 import emojis from "./emoji.json";
 
 const EMOJI_PER_CATEGORY = emojis.reduce(
   (
     acc: { [key: string]: string[] },
-    cur: { category: string; emoji: string }
+    cur: IEmoji
   ) => {
     if (acc[cur.category] == null) {
       acc[cur.category] = [];

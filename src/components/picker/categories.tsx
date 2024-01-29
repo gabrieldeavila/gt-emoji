@@ -3,7 +3,6 @@ import CATEGORIES from "../categories";
 import { CategoriesSt } from "./style";
 
 const Categories = memo(() => {
-  console.log();
   return (
     <CategoriesSt.Wrapper>
       <CategoriesSt.Content>
