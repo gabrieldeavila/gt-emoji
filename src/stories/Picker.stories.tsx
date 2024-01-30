@@ -7,7 +7,13 @@ export default {
 };
 
 const Template = () => {
-  return <Picker />;
+  return (
+    <Picker
+      onPickerChange={(emoji) => {
+        console.log(emoji, "suchwow");
+      }}
+    />
+  );
 };
 
 export const Tooltips = Template.bind({});

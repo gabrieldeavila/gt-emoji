@@ -6,7 +6,7 @@ const EmojiWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(45deg, #fcc200 0%, #32cd32  35%, #e0ffff 100%);
+  background: linear-gradient(45deg, #fcc200 0%, #32cd32 35%, #e0ffff 100%);
 
   * {
     user-select: none;
@@ -21,7 +21,7 @@ const EmojiContent = styled.div`
   margin: 1rem;
   border-radius: var(--emoji-picker-default-border-radius, 5px);
   max-height: 20rem;
-  max-width: 35vw;
+  max-width: 400px;
 `;
 
 const EmojiSt = {
@@ -60,15 +60,21 @@ const CategoriesContent = styled.div`
   ${scrollbarCss}
 `;
 
-const CategoriesItem = styled.div`
+const CategoriesItem = styled.div<{ isActive: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 0.2rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
+  margin: 0.25rem 0.2rem;
+  font-size: 1.5rem;
   user-select: none;
 
   border-radius: var(--emoji-picker-default-border-radius, 5px);
+
+  background: ${({ isActive }) =>
+    isActive
+      ? "var(--emoji-picker-category-background, #242124)"
+      : "transparent"};
 
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -100,8 +106,10 @@ const OptItemContent = styled.div`
   gap: 0.5rem;
 `;
 
-const EmojiName = styled.div`
+const EmojiName = styled.button`
   font-size: 2rem;
+  border: none;
+  background: transparent;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
@@ -147,7 +155,7 @@ const OptionsStContent = styled.div`
   ${scrollbarCss};
 
   & ${OptItemWrapper}:first-child ${OptItemName} {
-    padding-top: 0;
+    padding-top: 1rem;
   }
 `;
 
