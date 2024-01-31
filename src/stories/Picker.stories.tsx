@@ -1,5 +1,5 @@
-import React from "react";
-import Picker from "../components/picker/Picker";
+import React, { useCallback, useRef } from "react";
+import Picker, { IPickerRefProps } from "../components/picker/Picker";
 import "./global.css";
 
 export default {
@@ -7,12 +7,35 @@ export default {
 };
 
 const Template = () => {
+  const pickerRef = useRef<IPickerRefProps>(null);
+  const baseRef = useRef<HTMLButtonElement>(null);
+
+  const togglePicker = useCallback(() => {
+    if (pickerRef.current == null) return;
+
+    pickerRef.current.toggle();
+  }, []);
+
   return (
-    <Picker
-      onPickerChange={(emoji) => {
-        console.log(emoji, "suchwow");
-      }}
-    />
+    <>
+      <button
+        ref={baseRef}
+        onClick={togglePicker}
+        style={{
+          border: "none",
+        }}
+      >
+        Click to toggle picker
+      </button>
+
+      <Picker
+        baseRef={baseRef}
+        ref={pickerRef}
+        onPickerChange={(emoji) => {
+          console.log(emoji, "suchwow");
+        }}
+      />
+    </>
   );
 };
 

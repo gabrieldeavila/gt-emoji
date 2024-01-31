@@ -1,19 +1,6 @@
 import styled, { css } from "styled-components";
 
-const EmojiWrapper = styled.div`
-  width: 100dvw;
-  height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(45deg, #fcc200 0%, #32cd32 35%, #e0ffff 100%);
-
-  * {
-    user-select: none;
-  }
-`;
-
-const EmojiContent = styled.div`
+const EmojiContent = styled.div<{ isClosed: boolean }>`
   position: fixed;
   background: var(--emoji-picker-background, #1a11105c);
   backdrop-filter: blur(5px);
@@ -22,10 +9,19 @@ const EmojiContent = styled.div`
   border-radius: var(--emoji-picker-default-border-radius, 5px);
   max-height: 20rem;
   max-width: 400px;
+
+  * {
+    user-select: none;
+  }
+
+  transform: ${({ isClosed }) => (isClosed ? "scale(0.5)" : "scale(1)")};
+
+  opacity: ${({ isClosed }) => (isClosed ? 0 : 1)};
+
+  transition: all 0.2s ease-in-out;
 `;
 
 const EmojiSt = {
-  Wrapper: EmojiWrapper,
   Content: EmojiContent,
 };
 
