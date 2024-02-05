@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import { IEmoji } from "../../interfaces/EMOJI";
 import CATEGORIES from "../categories";
@@ -5,6 +6,7 @@ import EMOJI_PER_CATEGORY from "../emoji_per_category";
 import { OptionSt, OptionsSt } from "./style";
 import { stateStorage, useTriggerState } from "react-trigger-state";
 import { usePickerContext } from "../context";
+import { normalize } from "../utils/normalize";
 
 function Options() {
   const parentRef = useRef<HTMLDivElement>(null);
@@ -45,39 +47,64 @@ function Options() {
 
 export default Options;
 
-const Items = ({
-  name,
-  categoriesRef,
-}: {
-  name: string;
-  categoriesRef: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
-}) => {
-  const categoryEmojis = useMemo(
-    () => EMOJI_PER_CATEGORY[name] as unknown as IEmoji[],
-    [name]
-  );
+const Items = memo(
+  ({
+    name,
+    categoriesRef,
+  }: {
+    name: string;
+    categoriesRef: React.MutableRefObject<
+      Record<string, HTMLDivElement | null>
+    >;
+  }) => {
+    const [searchEmoji] = useTriggerState({ name: "search_gt_emoji" }) as [
+      string | null
+    ];
 
-  const onRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (node != null) {
-        categoriesRef.current[name] = node;
+    const categoryEmojis = useMemo(() => {
+      const emojis = EMOJI_PER_CATEGORY[name] as unknown as IEmoji[];
+
+      if (searchEmoji != null) {
+        console.log(searchEmoji, emojis, name);
+
+        return emojis.filter(
+          (emoji) =>
+            normalize(emoji.description).includes(normalize(searchEmoji)) ||
+            emoji.tags.some((tag) =>
+              normalize(tag).includes(normalize(searchEmoji))
+            )
+        );
       }
-    },
-    [categoriesRef, name]
-  );
 
-  return (
-    <OptionSt.Item.Wrapper ref={onRef} data-gt-emoji-category={name}>
-      <OptionSt.Item.Name>{name}</OptionSt.Item.Name>
+      return emojis;
+    }, [name, searchEmoji]);
 
-      <OptionSt.Item.Content>
-        {categoryEmojis.map((emoji, index) => (
-          <Emoji key={index} {...emoji} />
-        ))}
-      </OptionSt.Item.Content>
-    </OptionSt.Item.Wrapper>
-  );
-};
+    const onRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        if (node != null) {
+          categoriesRef.current[name] = node;
+        }
+      },
+      [categoriesRef, name]
+    );
+
+    if (categoryEmojis.length === 0) return null;
+
+    return (
+      <OptionSt.Item.Wrapper ref={onRef} data-gt-emoji-category={name}>
+        <OptionSt.Item.Name>{name}</OptionSt.Item.Name>
+
+        <OptionSt.Item.Content>
+          {categoryEmojis.map((emoji, index) => (
+            <Emoji key={index} {...emoji} />
+          ))}
+        </OptionSt.Item.Content>
+      </OptionSt.Item.Wrapper>
+    );
+  }
+);
+
+Items.displayName = "Items";
 
 const Emoji = memo((emoji: IEmoji) => {
   const { onPickerChange } = usePickerContext();
