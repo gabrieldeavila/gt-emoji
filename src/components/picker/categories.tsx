@@ -48,7 +48,7 @@ const Category = memo(({ emoji, name }: { emoji: string; name: string }) => {
       isActive={isCurrCategory}
       title={name}
     >
-      <span>{emoji}</span>
+      <CategoriesSt.Emoji>{emoji}</CategoriesSt.Emoji>
     </CategoriesSt.Item>
   );
 });

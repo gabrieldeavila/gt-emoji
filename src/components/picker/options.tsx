@@ -87,7 +87,10 @@ const Emoji = memo((emoji: IEmoji) => {
   }, [emoji, onPickerChange]);
 
   return (
-    <OptionSt.Emoji.Name onClick={handleClick}>
+    <OptionSt.Emoji.Name
+      onMouseEnter={() => stateStorage.set("emoji_hover", emoji)}
+      onClick={handleClick}
+    >
       <span>{emoji.emoji}</span>
     </OptionSt.Emoji.Name>
   );

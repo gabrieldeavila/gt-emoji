@@ -7,7 +7,7 @@ const EmojiContent = styled.div<{ isClosed: boolean }>`
   padding: 0.5rem;
   margin: 1rem;
   border-radius: var(--emoji-picker-default-border-radius, 5px);
-  max-height: 20rem;
+  max-height: 30rem;
   max-width: 400px;
 
   * {
@@ -56,6 +56,8 @@ const CategoriesContent = styled.div`
   ${scrollbarCss}
 `;
 
+const CategoriesEmoji = styled.div``;
+
 const CategoriesItem = styled.div<{ isActive: boolean }>`
   display: flex;
   justify-content: center;
@@ -83,12 +85,17 @@ const CategoriesItem = styled.div<{ isActive: boolean }>`
   &:active {
     transform: scale(0.9);
   }
+
+  ${CategoriesEmoji} {
+    filter: ${({ isActive }) => (isActive ? "grayscale(0)" : "grayscale(1)")};
+  }
 `;
 
 export const CategoriesSt = {
   Wrapper: CategoriesWrapper,
   Content: CategoriesContent,
   Item: CategoriesItem,
+  Emoji: CategoriesEmoji,
 };
 
 const OptItemWrapper = styled.div`
@@ -100,6 +107,8 @@ const OptItemContent = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
+  padding-left: 0.5rem;
+  padding-bottom: 1rem;
 `;
 
 const EmojiName = styled.button`
@@ -108,9 +117,16 @@ const EmojiName = styled.button`
   background: transparent;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  border-radius: var(--emoji-picker-default-border-radius, 5px);
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     transform: scale(1.1);
+    background: var(--emoji-picker-option-background, #242124);
+    filter: drop-shadow(2px 5px 1rem var(--emoji-picker-option-shadow, #000));
   }
 
   &:active {
@@ -119,7 +135,8 @@ const EmojiName = styled.button`
 `;
 
 const OptItemName = styled.div`
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight: bold;
   padding-top: 2rem;
   padding-bottom: 1rem;
 `;
@@ -158,4 +175,66 @@ const OptionsStContent = styled.div`
 export const OptionsSt = {
   Wrapper: OptionsStWrapper,
   Content: OptionsStContent,
+};
+
+const CurrentEmojiStWrapper = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 1rem;
+  height: 4rem;
+`;
+
+const CurrentEmojiStEmoji = styled.div`
+  font-size: 2.5rem;
+`;
+
+const CurrentEmojiStName = styled.div`
+  color: var(--emoji-picker-current-emoji-color, #fff);
+  text-transform: capitalize;
+`;
+
+export const CurrentEmojiSt = {
+  Wrapper: CurrentEmojiStWrapper,
+  Emoji: CurrentEmojiStEmoji,
+  Name: CurrentEmojiStName,
+};
+
+const SearchStSearchWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  border-radius: var(--emoji-picker-default-border-radius, 5px);
+  background: var(--emoji-picker-search-background, #242124);
+  color: var(--emoji-picker-search-color, #fff);
+  margin-bottom: 1rem;
+
+  &:focus-within {
+    outline: 2px solid var(--emoji-picker-search-focus-outline, #fff);
+    background: var(--emoji-picker-search-focus-background, #1a1110);
+  }
+`;
+
+const SearchStSearchIcon = styled.label`
+  font-size: 1.5rem;
+  display: flex;
+  cursor: pointer;
+`;
+
+const SearchStInput = styled.input`
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+  background: transparent;
+  outline: none;
+  color: var(--emoji-picker-search-color, #fff);
+`;
+
+export const SearchSt = {
+  Wrapper: SearchStSearchWrapper,
+  Icon: SearchStSearchIcon,
+  Input: SearchStInput,
 };

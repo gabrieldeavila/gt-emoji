@@ -12,6 +12,8 @@ import { IPickerContext, PickerProvider } from "../context";
 import Categories from "./categories";
 import Options from "./options";
 import EmojiSt from "./style";
+import CurrentEmoji from "./current";
+import Search from "./search";
 
 export interface IPickerRefProps {
   toggle: () => void;
@@ -78,9 +80,11 @@ const Picker = forwardRef<IPickerRefProps, IPickerProps>(
       <PickerProvider onPickerChange={onPickerChange}>
         {createPortal(
           <EmojiSt.Content isClosed={!tempShow} ref={onRef}>
+            <Search />
             <Settings pickerRef={pickerRef} baseRef={baseRef} />
             <Categories />
             <Options />
+            <CurrentEmoji />
           </EmojiSt.Content>,
           document.body
         )}
