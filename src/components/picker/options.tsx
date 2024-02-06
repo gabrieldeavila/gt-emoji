@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import { IEmoji } from "../../interfaces/EMOJI";
-import CATEGORIES from "../categories";
-import EMOJI_PER_CATEGORY from "../emoji_per_category";
 import { OptionSt, OptionsSt } from "./style";
 import { stateStorage, useTriggerState } from "react-trigger-state";
 import { usePickerContext } from "../context";
@@ -11,6 +9,15 @@ import { normalize } from "../utils/normalize";
 function Options() {
   const parentRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<Record<string, HTMLDivElement>>({});
+  const [CATEGORIES] = useTriggerState({
+    name: "gt-categories",
+  }) as [
+    Array<{
+      name: string;
+      emoji: string;
+    }>
+  ];
+
   useTriggerState({
     name: "curr_category",
     initial: CATEGORIES?.[0]?.name,
@@ -57,6 +64,10 @@ const Items = memo(
       Record<string, HTMLDivElement | null>
     >;
   }) => {
+    const [EMOJI_PER_CATEGORY] = useTriggerState({
+      name: "gt-emoji-per-category",
+    }) as [Record<string, IEmoji[]>];
+
     const [searchEmoji] = useTriggerState({ name: "search_gt_emoji" }) as [
       string | null
     ];
@@ -65,19 +76,17 @@ const Items = memo(
       const emojis = EMOJI_PER_CATEGORY[name] as unknown as IEmoji[];
 
       if (searchEmoji != null) {
-        console.log(searchEmoji, emojis, name);
-
         return emojis.filter(
           (emoji) =>
             normalize(emoji.description).includes(normalize(searchEmoji)) ||
-            emoji.tags.some((tag) =>
+            emoji.tags?.some?.((tag) =>
               normalize(tag).includes(normalize(searchEmoji))
             )
         );
       }
 
       return emojis;
-    }, [name, searchEmoji]);
+    }, [EMOJI_PER_CATEGORY, name, searchEmoji]);
 
     const onRef = useCallback(
       (node: HTMLDivElement | null) => {
@@ -88,7 +97,7 @@ const Items = memo(
       [categoriesRef, name]
     );
 
-    if (categoryEmojis.length === 0) return null;
+    if (categoryEmojis == null || categoryEmojis.length === 0) return null;
 
     return (
       <OptionSt.Item.Wrapper ref={onRef} data-gt-emoji-category={name}>

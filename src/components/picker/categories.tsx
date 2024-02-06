@@ -1,9 +1,16 @@
 import React, { memo, useCallback, useMemo } from "react";
-import CATEGORIES from "../categories";
 import { CategoriesSt } from "./style";
 import { useTriggerState } from "react-trigger-state";
 
 const Categories = memo(() => {
+  const [CATEGORIES] = useTriggerState({
+    name: "gt-categories",
+  }) as [
+    Array<{
+      name: string;
+      emoji: string;
+    }>
+  ];
   return (
     <CategoriesSt.Wrapper>
       <CategoriesSt.Content>

@@ -14,6 +14,7 @@ import Options from "./options";
 import EmojiSt from "./style";
 import CurrentEmoji from "./current";
 import Search from "./search";
+import useEmoji from "../hooks/useEmoji";
 
 export interface IPickerRefProps {
   toggle: () => void;
@@ -26,6 +27,8 @@ interface IPickerProps extends IPickerContext {
 const Picker = forwardRef<IPickerRefProps, IPickerProps>(
   ({ onPickerChange, baseRef }: IPickerProps, ref) => {
     const [pickerRef, setPickerRef] = useState<HTMLDivElement | null>(null);
+
+    useEmoji();
 
     const [tempShow, setTempShow] = useState(false);
     const [show, setShow] = useState(false);

@@ -7,16 +7,13 @@
     "type": "git",
     "url": "git+https://github.com/gabrieldeavila/gt-emoji.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A minimalistic emoji picker for React",
   "homepage": "https://github.com/gabrieldeavila/gt-emoji",
   "scripts": {
     "rollup": "rollup -c",
     "test": "jest",
-    "storybook": "start-storybook -p 6006 -s public",
-    "chromatic": "npx chromatic --project-token=080a8bbe9b98 --auto-accept-changes",
-    "build-storybook": "build-storybook -s public",
-    "serve-storybook": "serve storybook-static"
+    "storybook": "start-storybook -p 6006 -s public"
   },
   "lint": "eslint .",
   "author": {
