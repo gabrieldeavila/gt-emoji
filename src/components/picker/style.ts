@@ -1,32 +1,5 @@
 import styled, { css } from "styled-components";
 
-const EmojiContent = styled.div<{ isClosed: boolean }>`
-  position: fixed;
-  background: var(--emoji-picker-background, #1a11105c);
-  backdrop-filter: blur(5px);
-  padding: 0.5rem;
-  margin: 1rem;
-  border-radius: var(--emoji-picker-default-border-radius, 5px);
-  max-height: 30rem;
-  max-width: 400px;
-
-  * {
-    user-select: none;
-  }
-
-  transform: ${({ isClosed }) => (isClosed ? "scale(0.5)" : "scale(1)")};
-
-  opacity: ${({ isClosed }) => (isClosed ? 0 : 1)};
-
-  transition: all 0.2s ease-in-out;
-`;
-
-const EmojiSt = {
-  Content: EmojiContent,
-};
-
-export default EmojiSt;
-
 const CategoriesWrapper = styled.div``;
 
 const scrollbarCss = css`
@@ -238,3 +211,44 @@ export const SearchSt = {
   Icon: SearchStSearchIcon,
   Input: SearchStInput,
 };
+
+const EmojiContent = styled.div<{ isMobile: boolean; isClosed: boolean }>`
+  position: fixed;
+  background: var(--emoji-picker-background, #1a11105c);
+  backdrop-filter: blur(5px);
+  padding: 0.5rem;
+  margin: 1rem;
+  border-radius: var(--emoji-picker-default-border-radius, 5px);
+
+  ${({ isMobile }) =>
+    !isMobile
+      ? css`
+          max-height: 30rem;
+          max-width: 400px;
+        `
+      : css`
+          ${CategoriesContent} {
+            max-width: 100%;
+          }
+
+          ${CategoriesItem} {
+            flex-grow: 1;
+          }
+        `}
+
+  * {
+    user-select: none;
+  }
+
+  transform: ${({ isClosed }) => (isClosed ? "scale(0.5)" : "scale(1)")};
+
+  opacity: ${({ isClosed }) => (isClosed ? 0 : 1)};
+
+  transition: all 0.2s ease-in-out;
+`;
+
+const EmojiSt = {
+  Content: EmojiContent,
+};
+
+export default EmojiSt;

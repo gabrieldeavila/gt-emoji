@@ -9,12 +9,13 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { IPickerContext, PickerProvider } from "../context";
-import Categories from "./categories";
-import Options from "./options";
-import EmojiSt from "./style";
-import CurrentEmoji from "./current";
-import Search from "./search";
 import useEmoji from "../hooks/useEmoji";
+import Categories from "./categories";
+import CurrentEmoji from "./current";
+import Options from "./options";
+import Search from "./search";
+import EmojiSt from "./style";
+import useMobile from "../hooks/useMobile";
 
 export interface IPickerRefProps {
   toggle: () => void;
@@ -27,6 +28,7 @@ interface IPickerProps extends IPickerContext {
 const Picker = forwardRef<IPickerRefProps, IPickerProps>(
   ({ onPickerChange, baseRef }: IPickerProps, ref) => {
     const [pickerRef, setPickerRef] = useState<HTMLDivElement | null>(null);
+    const isMobile = useMobile();
 
     useEmoji();
 
@@ -82,12 +84,17 @@ const Picker = forwardRef<IPickerRefProps, IPickerProps>(
     return (
       <PickerProvider onPickerChange={onPickerChange}>
         {createPortal(
-          <EmojiSt.Content isClosed={!tempShow} ref={onRef}>
+          <EmojiSt.Content isMobile={isMobile} isClosed={!tempShow} ref={onRef}>
             <Search />
-            <Settings pickerRef={pickerRef} baseRef={baseRef} />
+            <Settings
+              isMobile={isMobile}
+              pickerRef={pickerRef}
+              baseRef={baseRef}
+            />
             <Categories />
-            <Options />
-            <CurrentEmoji />
+            <Options isMobile={isMobile} />
+
+            {!isMobile && <CurrentEmoji />}
           </EmojiSt.Content>,
           document.body
         )}
@@ -104,11 +111,15 @@ const Settings = memo(
   ({
     pickerRef,
     baseRef,
+    isMobile,
   }: {
     pickerRef: HTMLDivElement | null;
     baseRef: React.RefObject<HTMLElement>;
+    isMobile: boolean;
   }) => {
     useLayoutEffect(() => {
+      if (isMobile) return;
+
       if (pickerRef == null || baseRef.current == null) return;
 
       const baseBounds = baseRef.current.getBoundingClientRect();
@@ -130,6 +141,26 @@ const Settings = memo(
       pickerRef.style.left = `${left}px`;
       pickerRef.style.top = `${top}px`;
     });
+
+    useEffect(() => {
+      if (!isMobile) return;
+
+      if (pickerRef == null || baseRef.current == null) return;
+
+      pickerRef.style.left = "0";
+      pickerRef.style.top = "0";
+      pickerRef.style.bottom = "0";
+      pickerRef.style.right = "0";
+      pickerRef.style.maxHeight = "100%";
+      pickerRef.style.maxWidth = "100%";
+
+      return () => {
+        pickerRef.style.left = "";
+        pickerRef.style.top = "";
+        pickerRef.style.width = "";
+        pickerRef.style.height = "";
+      };
+    }, [baseRef, isMobile, pickerRef]);
 
     return null;
   }

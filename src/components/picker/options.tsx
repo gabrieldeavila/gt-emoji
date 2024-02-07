@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { memo, useCallback, useMemo, useRef } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { IEmoji } from "../../interfaces/EMOJI";
 import { OptionSt, OptionsSt } from "./style";
 import { stateStorage, useTriggerState } from "react-trigger-state";
 import { usePickerContext } from "../context";
 import { normalize } from "../utils/normalize";
 
-function Options() {
+const DEFAULT_PADDING = 80;
+
+function Options({ isMobile }: { isMobile: boolean }) {
   const parentRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<Record<string, HTMLDivElement>>({});
   const [CATEGORIES] = useTriggerState({
@@ -36,6 +38,33 @@ function Options() {
     },
     []
   );
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    // add the right height to the content
+    if (parentRef.current == null) return;
+
+    const parent = parentRef.current.parentElement?.parentElement;
+    const parentChildren = parent?.children;
+
+    if (parentChildren == null) return;
+
+    // get the height of each child (that do not contains content)
+    const childrenHeight = Array.from(parentChildren).reduce((acc, child) => {
+      if (child.contains(parentRef.current)) {
+        return acc;
+      }
+
+      return acc + child.clientHeight;
+    }, 0);
+
+    const availableHeight = window.innerHeight - childrenHeight - DEFAULT_PADDING;
+
+    parentRef.current.style.maxHeight = `${availableHeight}px`;
+
+    console.log(childrenHeight, availableHeight);
+  }, [isMobile]);
 
   return (
     <OptionsSt.Wrapper>
