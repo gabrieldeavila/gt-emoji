@@ -113,8 +113,22 @@ const Settings = memo(
 
       const baseBounds = baseRef.current.getBoundingClientRect();
 
-      pickerRef.style.left = `${baseBounds.left}px`;
-      pickerRef.style.top = `${baseBounds.height}px`;
+      let top = baseBounds.height + baseBounds.top;
+      let left = baseBounds.left;
+
+      const pickerHeight = pickerRef.clientHeight;
+      const pickerWidth = pickerRef.clientWidth;
+
+      if (top + pickerHeight > window.innerHeight) {
+        top = baseBounds.top - pickerRef.clientHeight - baseBounds.height;
+      }
+
+      if (left + pickerWidth > window.innerWidth) {
+        left = window.innerWidth - pickerWidth - baseBounds.width * 0.5;
+      }
+
+      pickerRef.style.left = `${left}px`;
+      pickerRef.style.top = `${top}px`;
     });
 
     return null;

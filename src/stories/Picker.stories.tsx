@@ -43,6 +43,7 @@ const Template = () => {
         width: "100dvw",
         height: "100dvh",
         display: "flex",
+        justifyContent: "center",
         alignItems: "center",
         flexDirection: "column"
       }}
