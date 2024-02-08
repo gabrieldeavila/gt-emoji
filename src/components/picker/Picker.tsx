@@ -159,6 +159,8 @@ const Settings = memo(
         pickerRef.style.top = "";
         pickerRef.style.width = "";
         pickerRef.style.height = "";
+        pickerRef.style.maxHeight = "";
+        pickerRef.style.maxWidth = "";
       };
     }, [baseRef, isMobile, pickerRef]);
 

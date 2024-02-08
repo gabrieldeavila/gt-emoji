@@ -62,8 +62,11 @@ function Options({ isMobile }: { isMobile: boolean }) {
     const availableHeight = window.innerHeight - childrenHeight - DEFAULT_PADDING;
 
     parentRef.current.style.maxHeight = `${availableHeight}px`;
+    const parentEl = parentRef.current;
 
-    console.log(childrenHeight, availableHeight);
+    return () => {
+      parentEl.style.maxHeight = "";
+    };
   }, [isMobile]);
 
   return (
