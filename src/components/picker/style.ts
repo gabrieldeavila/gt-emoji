@@ -252,3 +252,17 @@ const EmojiSt = {
 };
 
 export default EmojiSt;
+
+const CloseStX = styled.button`
+  position: absolute;
+  top: 0.8rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+export const CloseSt = {
+  X: CloseStX,
+};

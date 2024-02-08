@@ -16,6 +16,7 @@ import Options from "./options";
 import Search from "./search";
 import EmojiSt from "./style";
 import useMobile from "../hooks/useMobile";
+import Close from "./close";
 
 export interface IPickerRefProps {
   toggle: () => void;
@@ -85,6 +86,7 @@ const Picker = forwardRef<IPickerRefProps, IPickerProps>(
       <PickerProvider onPickerChange={onPickerChange}>
         {createPortal(
           <EmojiSt.Content isMobile={isMobile} isClosed={!tempShow} ref={onRef}>
+            <Close onClick={toggle} />
             <Search />
             <Settings
               isMobile={isMobile}
