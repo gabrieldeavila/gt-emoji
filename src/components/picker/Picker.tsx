@@ -17,6 +17,7 @@ import Search from "./search";
 import EmojiSt from "./style";
 import useMobile from "../hooks/useMobile";
 import Close from "./close";
+import { stateStorage } from "react-trigger-state";
 
 export interface IPickerRefProps {
   toggle: () => void;
@@ -38,6 +39,10 @@ const Picker = forwardRef<IPickerRefProps, IPickerProps>(
 
     const toggle = useCallback(() => {
       void (async () => {
+        const CATEGORIES = stateStorage.get("gt-categories");
+
+        stateStorage.set("curr_category", CATEGORIES?.[0]?.name);
+
         let newValue: boolean = false;
         await setShow((prev) => {
           newValue = !prev;

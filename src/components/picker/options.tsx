@@ -59,7 +59,8 @@ function Options({ isMobile }: { isMobile: boolean }) {
       return acc + child.clientHeight;
     }, 0);
 
-    const availableHeight = window.innerHeight - childrenHeight - DEFAULT_PADDING;
+    const availableHeight =
+      window.innerHeight - childrenHeight - DEFAULT_PADDING;
 
     parentRef.current.style.maxHeight = `${availableHeight}px`;
     const parentEl = parentRef.current;
@@ -151,6 +152,28 @@ const Emoji = memo((emoji: IEmoji) => {
   const { onPickerChange } = usePickerContext();
 
   const handleClick = useCallback(() => {
+    const frequentlyUsed = stateStorage.get(
+      "gt-core-frequently-used"
+    ) as string[];
+
+    const emojiIndex = frequentlyUsed.findIndex((e) => e === emoji.emoji);
+    // the max length of the frequently used is 10
+    if (emojiIndex === -1 && frequentlyUsed.length >= 10) {
+      frequentlyUsed.pop();
+    }
+
+    if (emojiIndex !== -1) {
+      frequentlyUsed.splice(emojiIndex, 1);
+    }
+
+    // add at the beginning of the array
+    frequentlyUsed.unshift(emoji.emoji);
+
+    stateStorage.set(
+      "gt-core-frequently-used",
+      structuredClone(frequentlyUsed)
+    );
+
     onPickerChange(emoji);
   }, [emoji, onPickerChange]);
 

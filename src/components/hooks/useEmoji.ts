@@ -2,16 +2,44 @@ import { useEffect, useMemo } from "react";
 import { stateStorage, useTriggerState } from "react-trigger-state";
 import { IEmoji } from "../../interfaces/EMOJI";
 
+// string to array
 function useEmoji() {
-  const [gtEmojiCore] = useTriggerState({
+  const [gtEmojiCore = { content: [], frequently_used: "" }] = useTriggerState({
     name: "gt-emoji-core",
+  }) as [{ content?: IEmoji[]; frequently_used: string }];
+
+  const [freqUsed] = useTriggerState({
+    name: "gt-core-frequently-used",
+    /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+    initial:
+      localStorage.getItem("gt-core-frequently-used")?.split?.(",") ?? [],
   });
 
-  const EMOJIS = useMemo(() => {
-    if (gtEmojiCore == null) return [];
+  const freqLabel = useMemo(() => gtEmojiCore.frequently_used, [gtEmojiCore]);
 
-    return gtEmojiCore.content;
-  }, [gtEmojiCore]) as IEmoji[];
+  const FREQUENTLY_USED = useMemo(() => {
+    if (gtEmojiCore == null) return [];
+    return structuredClone(gtEmojiCore.content)?.reduce<IEmoji[]>(
+      (acc: IEmoji[], emoji: IEmoji) => {
+        if (freqUsed.includes(emoji.emoji)) {
+          // push to the same index as the original
+          const emoIndex = freqUsed.findIndex(
+            (item: IEmoji["emoji"]) => item === emoji.emoji
+          );
+
+          acc[emoIndex] = { ...emoji, category: freqLabel };
+        }
+
+        return acc;
+      },
+      []
+    );
+  }, [freqLabel, freqUsed, gtEmojiCore]);
+
+  const EMOJIS = useMemo(
+    () => [...(FREQUENTLY_USED ?? []), ...(gtEmojiCore.content ?? [])],
+    [FREQUENTLY_USED, gtEmojiCore.content]
+  );
 
   const CATEGORIES = useMemo(
     () =>
@@ -28,9 +56,9 @@ function useEmoji() {
           }
           return acc;
         },
-        []
+        FREQUENTLY_USED?.length ? [{ name: freqLabel, emoji: "🕒" }] : []
       ),
-    [EMOJIS]
+    [EMOJIS, FREQUENTLY_USED?.length, freqLabel]
   );
 
   const EMOJI_PER_CATEGORY = useMemo(
@@ -51,7 +79,8 @@ function useEmoji() {
     stateStorage.set("gt-emojis", EMOJIS);
     stateStorage.set("gt-categories", CATEGORIES);
     stateStorage.set("gt-emoji-per-category", EMOJI_PER_CATEGORY);
-  }, [CATEGORIES, EMOJIS, EMOJI_PER_CATEGORY]);
+    stateStorage.set("gt-frequently-used", FREQUENTLY_USED);
+  }, [CATEGORIES, EMOJIS, EMOJI_PER_CATEGORY, FREQUENTLY_USED]);
 }
 
 export default useEmoji;

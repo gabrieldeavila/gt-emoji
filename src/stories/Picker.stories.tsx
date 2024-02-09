@@ -45,7 +45,7 @@ const Template = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
       <button
@@ -58,14 +58,7 @@ const Template = () => {
         Click to toggle picker
       </button>
 
-      <P
-        baseRef={baseRef}
-        ref={pickerRef}
-        onPickerChange={(emoji) => {
-          console.log(emoji, "suchwow");
-          alert(emoji.emoji);
-        }}
-      />
+      <P baseRef={baseRef} ref={pickerRef} onPickerChange={(emoji) => {}} />
 
       <div>
         <h3>Change picker language</h3>

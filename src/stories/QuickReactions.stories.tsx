@@ -6,7 +6,7 @@ import "./global.css";
 import { stateStorage } from "react-trigger-state";
 
 export default {
-  title: "Picker",
+  title: "Quick Reactions",
 };
 
 const Template = () => {
@@ -77,4 +77,4 @@ const Template = () => {
   );
 };
 
-export const Picker = Template.bind({});
+export const QuickReactions = Template.bind({});
