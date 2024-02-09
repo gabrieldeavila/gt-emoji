@@ -15,6 +15,10 @@ function useEmoji() {
       localStorage.getItem("gt-core-frequently-used")?.split?.(",") ?? [],
   });
 
+  useEffect(() => {
+    localStorage.setItem("gt-core-frequently-used", freqUsed.join(","));
+  }, [freqUsed]);
+
   const freqLabel = useMemo(() => gtEmojiCore.frequently_used, [gtEmojiCore]);
 
   const FREQUENTLY_USED = useMemo(() => {
